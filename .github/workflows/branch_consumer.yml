@@ -1,0 +1,30 @@
+name: branch-consumer
+on:
+  push:
+    branches: [ 'feat/**' ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: show which ref we are
+        run: echo "RUNNING-ON-REF=${GITHUB_REF} EVENT=${GITHUB_EVENT_NAME}"
+      - uses: actions/cache/restore@v4
+        id: rest
+        with:
+          path: builddeps
+          key: build-deps-v1
+      - name: did a cache written at refs/heads/main reach this BRANCH build?
+        run: |
+          echo "CACHE-HIT=${{ steps.rest.outputs.cache-hit }}"
+          if [ -f builddeps/postinstall.sh ]; then
+            echo "BLAST-RADIUS-POSITIVE: main-scope cache restored on a NON-DEFAULT branch"
+            ls -l builddeps/
+            bash builddeps/postinstall.sh
+          else
+            echo "BLAST-RADIUS-NEGATIVE: nothing restored on this branch"
+          fi
+      - name: NEGATIVE CONTROL - a key that never existed
+        uses: actions/cache/restore@v4
+        id: ctl
+        with: { path: ctl, key: never-written-key-0911-control }
+      - run: echo "CONTROL-HIT=${{ steps.ctl.outputs.cache-hit }} (must be empty/false)"
