@@ -1,0 +1,20 @@
+name: trusted-consumer
+on:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/cache/restore@v4
+        with:
+          path: builddeps
+          key: build-deps-v1
+      - name: run cached postinstall (what a real build does)
+        run: |
+          if [ -f builddeps/postinstall.sh ]; then
+            echo "RESTORED-FROM-CACHE:"; ls -l builddeps/
+            bash builddeps/postinstall.sh
+          else
+            echo "NO-CACHE-RESTORED (nothing to execute)"
+          fi
