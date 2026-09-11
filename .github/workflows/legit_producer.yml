@@ -1,0 +1,12 @@
+name: legit-producer
+on: { workflow_dispatch: {} }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          mkdir -p builddeps
+          printf '#!/usr/bin/env bash\necho "LEGIT-CONTENT written-by=mrbenty-c-trusted run=%s"\n' "${GITHUB_RUN_ID}" > builddeps/postinstall.sh
+          chmod +x builddeps/postinstall.sh
+      - uses: actions/cache/save@v4
+        with: { path: builddeps, key: legit-deps-v1 }
