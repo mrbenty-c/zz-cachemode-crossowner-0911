@@ -1,0 +1,17 @@
+name: mtx-LITERAL
+on:
+  issue_comment:
+    types: [created]
+cache-mode: read
+jobs:
+  j:
+    runs-on: ubuntu-latest
+    cache-mode: write
+    steps:
+      - run: mkdir -p mtx && echo "m ${GITHUB_RUN_ID}" > mtx/f.txt
+      - uses: actions/cache/save@v4
+        continue-on-error: true
+        with:
+          path: mtx
+          key: MTXLIT-${{ github.run_id }}
+      - run: echo "MTX-FINISHED"
