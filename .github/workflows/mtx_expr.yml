@@ -1,0 +1,20 @@
+name: mtx-EXPR
+on:
+  issue_comment:
+    types: [created]
+cache-mode: read
+jobs:
+  j:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mode: [write]
+    cache-mode: ${{ matrix.mode }}
+    steps:
+      - run: mkdir -p mtx && echo "m ${GITHUB_RUN_ID}" > mtx/f.txt
+      - uses: actions/cache/save@v4
+        continue-on-error: true
+        with:
+          path: mtx
+          key: MTXEXPR-${{ github.run_id }}
+      - run: echo "MTX-FINISHED"
