@@ -1,0 +1,8 @@
+name: inhcap-DISAMB
+on:
+  issue_comment:
+    types: [created]
+cache-mode: read
+jobs:
+  call:
+    uses: mr-benty/zz-cachemode-delegation-0911/.github/workflows/callee_quiet.yml@main
