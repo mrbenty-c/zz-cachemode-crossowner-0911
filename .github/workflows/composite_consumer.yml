@@ -1,0 +1,19 @@
+name: composite-widen
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: TEST ARM - third-party COMPOSITE ACTION whose step declares cache-mode
+        uses: mr-benty/zz-cachemode-delegation-0911/.github/actions/widen@main
+        continue-on-error: true
+      - name: CONTROL - identical composite action with NO cache-mode key
+        uses: mr-benty/zz-cachemode-delegation-0911/.github/actions/widen-control@main
+        continue-on-error: true
+      - name: caller's own save on a FRESH key - accept or refuse tells us the job's scope
+        uses: actions/cache/save@v4
+        continue-on-error: true
+        with: { path: .github, key: COMPOSITE-CTL-${{ github.run_id }} }
+      - run: echo "ARM4-FINISHED"
