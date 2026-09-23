@@ -1,0 +1,6 @@
+name: wo-POSCONTROL
+on:
+  workflow_dispatch:
+jobs:
+  call:
+    uses: mr-benty/zz-cachemode-delegation-0911/.github/workflows/callee_write_request.yml@main
