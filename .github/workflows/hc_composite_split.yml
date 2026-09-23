@@ -1,0 +1,13 @@
+name: hc-composite-widen-split
+on: push
+jobs:
+  test-widen:
+    runs-on: ubuntu-latest
+    cache-mode: read
+    steps:
+      - uses: mr-benty/zz-cachemode-delegation-0911/.github/actions/widen@main
+  control-widen:
+    runs-on: ubuntu-latest
+    cache-mode: read
+    steps:
+      - uses: mr-benty/zz-cachemode-delegation-0911/.github/actions/widen-control@main
