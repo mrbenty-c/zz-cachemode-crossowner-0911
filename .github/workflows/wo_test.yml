@@ -1,0 +1,9 @@
+name: wo-TEST
+on:
+  workflow_dispatch:
+  issue_comment:
+    types: [created]
+jobs:
+  call:
+    cache-mode: write-only
+    uses: mr-benty/zz-cachemode-delegation-0911/.github/workflows/callee_read_request.yml@main
