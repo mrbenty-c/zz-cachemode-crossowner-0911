@@ -1,0 +1,45 @@
+name: cache-mode-composite-split
+on:
+  workflow_dispatch:
+jobs:
+  test-read-via-composite:
+    runs-on: ubuntu-latest
+    cache-mode: read
+    steps:
+      - uses: mr-benty/zz-cachemode-delegation-0911/.github/actions/cache-probe@main
+        with:
+          label: TEST-READ
+        continue-on-error: true
+      - run: echo "TEST-READ-FINISHED"
+
+  control-write-via-composite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mr-benty/zz-cachemode-delegation-0911/.github/actions/cache-probe@main
+        with:
+          label: CTL-WRITE
+        continue-on-error: true
+      - run: echo "CTL-WRITE-FINISHED"
+
+  baseline-read-direct:
+    runs-on: ubuntu-latest
+    cache-mode: read
+    steps:
+      - run: mkdir -p probe-data && echo "baseline-${{ github.run_id }}" > probe-data/marker.txt
+      - uses: actions/cache/save@v4
+        with:
+          path: probe-data
+          key: probe-BASE-READ-${{ github.run_id }}
+        continue-on-error: true
+      - run: echo "BASELINE-READ-FINISHED"
+
+  baseline-write-direct:
+    runs-on: ubuntu-latest
+    steps:
+      - run: mkdir -p probe-data && echo "baseline-${{ github.run_id }}" > probe-data/marker.txt
+      - uses: actions/cache/save@v4
+        with:
+          path: probe-data
+          key: probe-BASE-WRITE-${{ github.run_id }}
+        continue-on-error: true
+      - run: echo "BASELINE-WRITE-FINISHED"
